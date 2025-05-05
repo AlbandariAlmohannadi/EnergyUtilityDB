@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meter Reading Form</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="form-container">
+        <h1>Meter Reading Form</h1>
+        
+        <!-- Form -->
+        <form id="readingForm">
+            <!-- Meter ID Dropdown -->
+            <div class="form-group">
+                <label for="meterId">Meter ID:</label>
+                <select id="meterId" required>
+                    <option value="">Select Meter ID</option>
+                    <!-- Populated by JavaScript -->
+                </select>
+                <div class="error" id="meterError"></div>
+            </div>
+
+            <!-- Date Input -->
+            <div class="form-group">
+                <label for="date">Date:</label>
+                <input type="date" id="date" required max="2025-12-31">
+                <div class="error" id="dateError"></div>
+            </div>
+
+            <!-- Value Input -->
+            <div class="form-group">
+                <label for="value">Value (kWh):</label>
+                <input type="number" id="value" step="0.01" min="0.01" required>
+                <div class="error" id="valueError"></div>
+            </div>
+
+            <!-- Buttons -->
+            <div class="button-group">
+                <button type="submit">Submit</button>
+                <button type="button" onclick="resetForm()">Cancel</button>
+            </div>
+        </form>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

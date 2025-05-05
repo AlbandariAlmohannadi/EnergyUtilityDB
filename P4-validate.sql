@@ -1,0 +1,6 @@
+SHOW TABLES;
+
+SELECT * FROM Location;
+SELECT * FROM Meter;
+SELECT * FROM Reading;
+SELECT * FROM AuditLog;
