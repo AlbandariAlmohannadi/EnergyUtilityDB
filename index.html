@@ -5,38 +5,101 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meter Reading Form</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        .form-container {
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-container h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+
+        .form-group .error {
+            color: red;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .button-group button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            width: 48%;
+        }
+
+        .button-group button:hover {
+            background-color: #45a049;
+        }
+
+        .button-group button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+    </style>
 </head>
 <body>
     <div class="form-container">
         <h1>Meter Reading Form</h1>
         
-        <!-- Form -->
         <form id="readingForm">
-            <!-- Meter ID Dropdown -->
             <div class="form-group">
                 <label for="meterId">Meter ID:</label>
                 <select id="meterId" required>
                     <option value="">Select Meter ID</option>
-                    <!-- Populated by JavaScript -->
-                </select>
+                    </select>
                 <div class="error" id="meterError"></div>
             </div>
 
-            <!-- Date Input -->
             <div class="form-group">
                 <label for="date">Date:</label>
                 <input type="date" id="date" required max="2025-12-31">
                 <div class="error" id="dateError"></div>
             </div>
 
-            <!-- Value Input -->
             <div class="form-group">
                 <label for="value">Value (kWh):</label>
                 <input type="number" id="value" step="0.01" min="0.01" required>
                 <div class="error" id="valueError"></div>
             </div>
 
-            <!-- Buttons -->
             <div class="button-group">
                 <button type="submit">Submit</button>
                 <button type="button" onclick="resetForm()">Cancel</button>
@@ -44,6 +107,92 @@
         </form>
     </div>
 
-    <script src="script.js"></script>
+    <script>
+        const meterIds = ['1001', '1002', '1003', '1004', '1005', '1006', '1007', '1008'];
+
+        window.onload = function() {
+            const meterIdDropdown = document.getElementById('meterId');
+
+            meterIds.forEach(id => {
+                let option = document.createElement('option');
+                option.value = id;
+                option.textContent = id;
+                meterIdDropdown.appendChild(option);
+            });
+
+            const form = document.getElementById('readingForm');
+            form.addEventListener('submit', validateAndSubmit);
+        };
+
+        function validateAndSubmit(event) {
+            event.preventDefault();
+
+            let meterValid = validateMeterId();
+            let dateValid = validateDate();
+            let valueValid = validateValue();
+
+            if (meterValid && dateValid && valueValid) {
+                alert('Form submitted successfully!');
+                resetForm();
+            }
+        }
+
+        function resetForm() {
+            document.getElementById('readingForm').reset();
+            resetErrors();
+        }
+
+        function resetErrors() {
+            document.getElementById('meterError').textContent = '';
+            document.getElementById('dateError').textContent = '';
+            document.getElementById('valueError').textContent = '';
+        }
+
+        function validateMeterId() {
+            const meterIdInput = document.getElementById('meterId');
+            const meterError = document.getElementById('meterError');
+            if (meterIdInput.value === "") {
+                meterError.textContent = 'Please select a Meter ID.';
+                return false;
+            } else {
+                meterError.textContent = '';
+                return true;
+            }
+        }
+
+        function validateDate() {
+            const dateInput = document.getElementById('date');
+            const dateError = document.getElementById('dateError');
+            const selectedDate = new Date(dateInput.value);
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            if (!dateInput.value) {
+                dateError.textContent = 'Please enter the date.';
+                return false;
+            }  else if (selectedDate > today) {
+                dateError.textContent = 'Date cannot be in the future.';
+                return false;
+            } else {
+                dateError.textContent = '';
+                return true;
+            }
+        }
+
+        function validateValue() {
+            const valueInput = document.getElementById('value');
+            const valueError = document.getElementById('valueError');
+            if (!valueInput.value) {
+                valueError.textContent = 'Please enter the value.';
+                return false;
+            } else if (parseFloat(valueInput.value) <= 0) {
+                valueError.textContent = 'Value must be greater than zero.';
+                return false;
+            } else {
+                valueError.textContent = '';
+                return true;
+            }
+        }
+    </script>
 </body>
 </html>
